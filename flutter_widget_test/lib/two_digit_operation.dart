@@ -5,11 +5,13 @@ import 'package:flutter_widget_test/operation.dart';
 class TwoDigitOperation extends StatefulWidget {
   final Operation operation;
   final Calculator calculator;
+  final VoidCallback onCalculated;
 
   const TwoDigitOperation({
     super.key,
     required this.operation,
     required this.calculator,
+    required this.onCalculated,
   });
 
   @override
@@ -19,7 +21,7 @@ class TwoDigitOperation extends StatefulWidget {
 class _TwoDigitOperationState extends State<TwoDigitOperation> {
   late TextEditingController controllerTextfieldTop;
   late TextEditingController controllerTextfieldBottom;
-  num result = 0;
+  num total = 0;
 
   @override
   void initState() {
@@ -47,38 +49,40 @@ class _TwoDigitOperationState extends State<TwoDigitOperation> {
               final b = num.tryParse(controllerTextfieldBottom.text) ?? 0;
 
               _calculate(a, b).then((value) {
-                setState(() {
-                  result = value;
-                });
+                setState(() {});
               });
             },
             child: const Icon(Icons.add)),
         Text(
-          'result=$result',
+          'result=$total',
           key: const Key('result_text'),
         )
       ],
     );
   }
 
-  Future<num> _calculate(num a, num b) async {
-    num result;
-    switch (widget.operation) {
-      case Operation.add:
-        result = await Future.value(widget.calculator.add(a, b));
-        break;
-      case Operation.substract:
-        result = await Future.value(widget.calculator.substract(a, b));
-        break;
-      case Operation.divide:
-        result = await Future.value(widget.calculator.divide(a, b));
-        break;
-      case Operation.powerTo:
-        result = await widget.calculator.powerTo(a, b);
-        break;
-      default:
-        result = await Future.value(widget.calculator.multiply(a, b));
+  Future<void> _calculate(num a, num b) async {
+    try {
+      switch (widget.operation) {
+        case Operation.add:
+          total = await Future.value(widget.calculator.add(a, b));
+          break;
+        case Operation.substract:
+          total = await Future.value(widget.calculator.substract(a, b));
+          break;
+        case Operation.divide:
+          total = await Future.value(widget.calculator.divide(a, b));
+
+          break;
+        case Operation.powerTo:
+          total = await widget.calculator.powerTo(a, b);
+          break;
+        default:
+          total = await Future.value(widget.calculator.multiply(a, b));
+      }
+      widget.onCalculated();
+    } catch (e) {
+      debugPrint('hata yakaladık = ${e.toString()}');
     }
-    return result;
   }
 }

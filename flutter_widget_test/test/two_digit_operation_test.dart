@@ -12,12 +12,14 @@ void main() {
   late Finder finderTextfieldTop;
   late Finder finderTextfieldBottom;
   late Finder finderButton;
+  late bool isCalculated;
 
   setUp(() {
     calc = MockCalculator();
     finderTextfieldTop = find.byKey(const Key('textfield_top_plus'));
     finderTextfieldBottom = find.byKey(const Key('textfield_bottom_plus'));
     finderButton = find.byKey(const Key('calc_button'));
+    isCalculated = false;
   });
 
   group('TwoDigitOperation', () {
@@ -27,7 +29,11 @@ void main() {
 
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-            body: TwoDigitOperation(operation: Operation.add, calculator: calc),
+            body: TwoDigitOperation(
+              operation: Operation.add,
+              calculator: calc,
+              onCalculated: () => isCalculated = true,
+            ),
           ),
         ));
 
@@ -55,7 +61,10 @@ void main() {
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
             body: TwoDigitOperation(
-                operation: Operation.powerTo, calculator: calc),
+              operation: Operation.powerTo,
+              calculator: calc,
+              onCalculated: () => isCalculated = true,
+            ),
           ),
         ));
 
@@ -81,7 +90,10 @@ void main() {
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
             body: TwoDigitOperation(
-                operation: Operation.divide, calculator: calc),
+              operation: Operation.divide,
+              calculator: calc,
+              onCalculated: () => isCalculated = true,
+            ),
           ),
         ));
 
@@ -105,7 +117,10 @@ void main() {
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
             body: TwoDigitOperation(
-                operation: Operation.divide, calculator: calc),
+              operation: Operation.divide,
+              calculator: calc,
+              onCalculated: () => isCalculated = true,
+            ),
           ),
         ));
 
@@ -123,8 +138,11 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        // result should be 0 because of stubbed calc.divide throw exception
-        expect(find.text('result=0'), findsOneWidget);
+        // verify stubbed calc.divide called for once
+        verify(() => calc.divide(10, 0)).called(1);
+
+        // isCalculated should be false because of throw exception from mock
+        expect(isCalculated, false);
       });
     });
   });

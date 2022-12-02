@@ -46,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: TwoDigitOperation(operation: Operation.divide, calculator: calc));
+        body: TwoDigitOperation(
+          operation: Operation.divide,
+          calculator: calc,
+          onCalculated: () {},
+        ));
   }
 }
