@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_widget_test/calculator.dart';
-import 'package:test/test.dart';
 
 void main() {
   late Calculator calc;

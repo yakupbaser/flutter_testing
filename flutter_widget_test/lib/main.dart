@@ -3,6 +3,8 @@ import 'package:flutter_widget_test/calculator.dart';
 import 'package:flutter_widget_test/operation.dart';
 import 'package:flutter_widget_test/two_digit_operation.dart';
 
+import 'pi.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -46,10 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: TwoDigitOperation(
-          operation: Operation.divide,
-          calculator: calc,
-          onCalculated: () {},
+        body: Column(
+          children: [
+            TwoDigitOperation(
+              operation: Operation.divide,
+              calculator: calc,
+              onCalculated: () {},
+            ),
+            Pi(calculator: calc),
+          ],
         ));
   }
 }
