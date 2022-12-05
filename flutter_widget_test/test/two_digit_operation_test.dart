@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_widget_test/calculator.dart';
+import 'package:flutter_widget_test/main.dart';
 import 'package:flutter_widget_test/operation.dart';
+import 'package:flutter_widget_test/pi.dart';
 import 'package:flutter_widget_test/two_digit_operation.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -50,7 +52,7 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        expectLater(find.text('result=4'), findsOneWidget);
+        expect(find.text('result=4'), findsOneWidget);
       });
     });
 
@@ -144,6 +146,46 @@ void main() {
         // isCalculated should be false because of throw exception from mock
         expect(isCalculated, false);
       });
+    });
+
+    /*group('Pi', () {
+      testWidgets('renders the result provided by the calculator',
+          (tester) async {
+        when(() => calc.pi()).thenAnswer(
+          (invocation) => Stream.periodic(
+            const Duration(milliseconds: 4),
+            ((eventIndex) {
+              if (eventIndex == 0) return 3.1;
+              if (eventIndex == 1) return 3.14;
+              if (eventIndex == 2) return 3.141;
+              return null;
+            }),
+          ),
+        );
+
+        await tester.pumpWidget(MaterialApp(
+          home: Scaffold(body: Pi(calculator: calc)),
+        ));
+
+        late Finder finderStreamText;
+        finderStreamText = find.byKey(const Key('stream_text'));
+        expect(finderStreamText, findsOneWidget);
+        await tester.pumpAndSettle(const Duration(milliseconds: 4));
+        expect(
+            find.text('The lastest known value of pi is 3.1'), findsOneWidget);
+        await tester.pumpAndSettle(const Duration(milliseconds: 4));
+        expect(
+            find.text('The lastest known value of pi is 3.14'), findsOneWidget);
+        await tester.pumpAndSettle(const Duration(milliseconds: 4));
+        expect(find.text('The lastest known value of pi is 3.141'),
+            findsOneWidget);
+      });
+    }); */
+
+    testWidgets('matches golden file', (tester) async {
+      await tester.pumpWidget(const MyApp());
+      await expectLater(
+          find.byType(MyApp), matchesGoldenFile('goldens/calculator_app.png'));
     });
   });
 }

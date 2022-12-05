@@ -18,5 +18,5 @@ class Calculator {
     return Future.delayed(const Duration(seconds: 0), () => pow(a, b));
   }
 
-  Stream<num> pi() => Stream.fromIterable([3, 3.1, 3.14, 3.141, 3.1415]);
+  Stream<num?> pi() => Stream.fromIterable([3, 3.1, 3.14, 3.141, 3.1415]);
 }
